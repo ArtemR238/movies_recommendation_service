@@ -1,0 +1,26 @@
+services:
+  web:
+    build: .
+    container_name: movielens_api
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/moviedb
+      - OPENBLAS_NUM_THREADS=1
+    depends_on:
+      - db
+    volumes:
+      - ./data:/app/data
+
+  db:
+    image: postgres:15-alpine
+    container_name: movielens_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=moviedb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
